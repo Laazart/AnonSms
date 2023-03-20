@@ -1,9 +1,7 @@
 #!/bin/python3
 #Author: L4z4rt
 from colorama import Fore, init
-import requests
-import os
-import platform
+import requests, os, platform
 
 def clr():   
     if platform.system() == "Linux":
@@ -12,21 +10,17 @@ def clr():
     elif platform.system()== "Windows":
         os.system("cls") 
         
-def sendMessage(x, y):
-    key = "textbelt"
+def sendMessage(phone, message):
+    key = "textbelt" # <-- Ingrese su api key de textbelt en esat variable
     resp = requests.post('https://textbelt.com/text', {
-      'phone': x,
-      'message': y,
+      'phone': phone,
+      'message': message,
       'key': key
     })
     payload = resp.json()
     succesData = payload['success']
-    try:   
+    try:
         quotaData = payload['quotaRemaining']
-    except :
-        print(f"{Fore.RED}\n[*] Ingrese un numero valido!")
-        exit()
-    try:         
         textIdData = payload['textId']
         clr()
         print(f"{Fore.GREEN}< ---- Succes ---- >")
@@ -36,13 +30,8 @@ def sendMessage(x, y):
         print(f"QuotaRemaining: {quotaData}")
         print(f"Id: {textIdData}")
     except:
-        errorData = payload['error']
-        clr()
-        print(f"{Fore.RED}< ---- Error ---- >")
-        print(f"Status: {succesData}")
-        print(f"Error: {errorData}")
-        print(f"QuotaRemaining: {quotaData}")
+        print(f"{Fore.RED}[*]Error: Verifique el numero destinatario y/o la cuota de su api(Recuerde que puede enviar un mensaje gratuito por dia)")
 if __name__ == "__main__":
-    phone = input("Phone: ")
+    phone = input("Phone(Add Code Country): ")
     message = input("Message: ")
     sendMessage(phone, message)
